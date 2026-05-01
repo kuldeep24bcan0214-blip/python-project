@@ -1,35 +1,50 @@
-import random
+import  random
 import string
-import _tkinter as tk
+import tkinter as tk
 from tkinter import messagebox
 
-def passworg_gen():
-    length=int(entry_length.get())
-    character=string.ascii_letters
-    if var_digits.get():
-        character+=string.digits
-    if var_symbol.get():
-        character+=string.punctuation
-    password=''.join((random.choice(character)) for _ in range(length))
+def generate_password():
+    try:
+        length = int(entry_length.get())
+        if length <= 0:
+            messagebox.showerror("Error", "Enter valid length")
+            return
+    except:
+        messagebox.showerror("Error", "Enter a number")
+        return
 
-    entry_result.delete(0,tk.end)
+    characters = string.ascii_letters
+
+    if var_digits.get():
+        characters += string.digits
+    if var_symbol.get():
+        characters += string.punctuation
+
+    password = ''.join(random.choice(characters) for _ in range(length))
+
+    entry_result.delete(0, tk.END)
     entry_result.insert(0, password)
-#GUI Window
-root=tk.Tk()
-root.title("password generator")
-root.geometry(250*250)
+
+# GUI Window
+root = tk.Tk()
+root.title("Password Generator")
+root.geometry("300x250")
+
 # Length Input
 tk.Label(root, text="Password Length:").pack()
 entry_length = tk.Entry(root)
 entry_length.pack()
-#options
-var_digits=tk.BoolenVar()
-var_symbol=tk.BoolenVar()
 
-tk.checkbutton(root,text="include numbers",variable=var_digits).pack()
-tk.checkbutton(root,symbol="include symbols",variable=var_symbol).pack()
- #Generate button((
-tk.button(root,text="Generate Password",command=Generate_Password).pack(pady=10)
+# Options
+var_digits = tk.BooleanVar()
+var_symbol = tk.BooleanVar()
+
+tk.Checkbutton(root, text="Include Numbers", variable=var_digits).pack()
+tk.Checkbutton(root, text="Include Symbols", variable=var_symbol).pack()
+
+# Generate Button
+tk.Button(root, text="Generate Password", command=generate_password).pack(pady=10)
+
 # Result
 entry_result = tk.Entry(root, width=30)
 entry_result.pack()
